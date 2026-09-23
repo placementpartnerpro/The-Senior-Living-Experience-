@@ -1,0 +1,28 @@
+{
+  "name": "avibrantliving-autopilot",
+  "version": "1.0.0",
+  "description": "Automated SEO blog publishing pipeline for avibrantliving.com",
+  "main": "bin/run.js",
+  "scripts": {
+    "doctor": "node bin/doctor.js",
+    "draft": "node bin/run.js --draft",
+    "publish": "node bin/run.js",
+    "scheduler": "node bin/scheduler.js",
+    "test-email": "node bin/test-email.js",
+    "topics:refill": "node bin/refill-topics.js",
+    "topics:status": "node bin/refill-topics.js --status",
+    "test": "node --test test/*.test.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.128.0",
+    "dotenv": "^18.0.3",
+    "node-cron": "^4.6.0",
+    "nodemailer": "^10.0.10",
+    "zod": "^4.6.5"
+  },
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  }
+}

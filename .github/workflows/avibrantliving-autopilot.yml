@@ -1,0 +1,95 @@
+# Hosted scheduler for avibrantliving-autopilot (alternative to running `npm run scheduler` on a server).
+# GitHub cron runs in UTC and does not follow daylight saving, so each slot is scheduled at both
+# possible UTC hours; `--slot auto` only publishes when the Los Angeles local hour is 8, 12, or 17.
+name: Blog autopilot
+
+on:
+  schedule:
+    - cron: '3 15,16,19,20 * * *'   # 8 AM and 12 PM Pacific (PDT and PST)
+    - cron: '3 0,1 * * *'           # 5 PM Pacific (PDT and PST)
+  workflow_dispatch:
+    inputs:
+      slot:
+        description: 'Slot to run'
+        type: choice
+        options: [morning, midday, evening]
+        default: morning
+      mode:
+        description: 'publish = live, draft = WordPress draft for review, preview = no WordPress'
+        type: choice
+        options: [draft, publish, preview]
+        default: draft
+      force:
+        description: 'Publish even if this slot already published today'
+        type: boolean
+        default: false
+
+concurrency:
+  group: blog-autopilot
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: avibrantliving-autopilot
+    env:
+      FACILITY_NAME: ${{ vars.FACILITY_NAME }}
+      FACILITY_PHONE: ${{ vars.FACILITY_PHONE }}
+      CTA_URL: ${{ vars.CTA_URL }}
+      FAMILY_GUIDE_URL: ${{ vars.FAMILY_GUIDE_URL }}
+      SERVICES_URL: ${{ vars.SERVICES_URL }}
+      CONTACT_URL: ${{ vars.CONTACT_URL }}
+      WP_SITE_URL: ${{ vars.WP_SITE_URL }}
+      WP_POST_STATUS: ${{ vars.WP_POST_STATUS || 'publish' }}
+      NOTIFY_EMAIL: ${{ vars.NOTIFY_EMAIL }}
+      EMAIL_FROM: ${{ vars.EMAIL_FROM }}
+      GMAIL_USER: ${{ vars.GMAIL_USER }}
+      WP_USER: ${{ secrets.WP_USER }}
+      WP_APP_PASSWORD: ${{ secrets.WP_APP_PASSWORD }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY }}
+      PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+      SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+      GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: avibrantliving-autopilot/package-lock.json
+      - run: npm ci
+      - name: Run slot
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            ARGS="--slot ${{ inputs.slot }}"
+            [ "${{ inputs.mode }}" = "draft" ] && ARGS="$ARGS --draft"
+            [ "${{ inputs.mode }}" = "preview" ] && ARGS="$ARGS --preview"
+            [ "${{ inputs.force }}" = "true" ] && ARGS="$ARGS --force"
+          else
+            ARGS="--slot auto"
+          fi
+          node bin/run.js $ARGS
+      - name: Save topic queue and history
+        if: always()
+        run: |
+          git config user.name "blog-autopilot"
+          git config user.email "blog-autopilot@users.noreply.github.com"
+          git add topics.json state/
+          git diff --cached --quiet || (git commit -m "autopilot: update topic queue and history" && git pull --rebase && git push)
+      - name: Upload logs and previews
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: autopilot-${{ github.run_id }}
+          path: |
+            avibrantliving-autopilot/logs/
+            avibrantliving-autopilot/drafts/
+          if-no-files-found: ignore
+          retention-days: 90
