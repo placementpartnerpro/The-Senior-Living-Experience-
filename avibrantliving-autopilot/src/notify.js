@@ -18,13 +18,19 @@ async function sendViaSendgrid({ subject, html, text }) {
   if (!res.ok) throw new Error(`SendGrid responded ${res.status}: ${await res.text()}`);
 }
 
-async function sendViaGmail({ subject, html, text }) {
-  const transport = nodemailer.createTransport({
-    service: 'gmail',
-    auth: { user: config.email.gmailUser, pass: config.email.gmailAppPassword },
-  });
-  await transport.sendMail({
-    from: `"${config.facility.name} Autopilot" <${config.email.gmailUser}>`,
+export function smtpTransport(provider = emailProvider()) {
+  if (provider === 'gmail') {
+    return nodemailer.createTransport({ service: 'gmail', auth: { user: config.email.gmailUser, pass: config.email.gmailAppPassword } });
+  }
+  const { smtpHost: host, smtpPort: port, smtpUser: user, smtpPass: pass } = config.email;
+  return nodemailer.createTransport({ host, port, secure: port === 465, auth: { user, pass } });
+}
+
+// Gmail and other SMTP hosts only accept a From address the login is allowed to
+// send as (the account itself or a verified alias).
+async function sendViaSmtp({ subject, html, text }) {
+  await smtpTransport().sendMail({
+    from: `"${config.facility.name} Autopilot" <${config.email.from}>`,
     to: config.email.to,
     subject,
     text,
@@ -34,15 +40,16 @@ async function sendViaGmail({ subject, html, text }) {
 
 export function emailProvider() {
   if (config.email.sendgridKey) return 'sendgrid';
+  if (config.email.smtpHost && config.email.smtpUser && config.email.smtpPass) return 'smtp';
   if (config.email.gmailUser && config.email.gmailAppPassword) return 'gmail';
   return null;
 }
 
 export async function sendEmail(message) {
   const provider = emailProvider();
-  if (!provider) throw new Error('No email credentials configured (SENDGRID_API_KEY or GMAIL_USER + GMAIL_APP_PASSWORD).');
+  if (!provider) throw new Error('No email credentials configured (SENDGRID_API_KEY, SMTP_HOST + SMTP_USER + SMTP_PASS, or GMAIL_USER + GMAIL_APP_PASSWORD).');
   if (!config.email.to) throw new Error('NOTIFY_EMAIL is not set.');
-  return provider === 'sendgrid' ? sendViaSendgrid(message) : sendViaGmail(message);
+  return provider === 'sendgrid' ? sendViaSendgrid(message) : sendViaSmtp(message);
 }
 
 const shell = (inner) => `<div style="font-family:Georgia,serif;max-width:640px;margin:0 auto;color:#2d2a26;line-height:1.5">${inner}</div>`;

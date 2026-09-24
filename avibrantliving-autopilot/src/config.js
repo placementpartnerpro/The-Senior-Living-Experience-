@@ -39,8 +39,12 @@ export const config = {
   },
   email: {
     to: env('NOTIFY_EMAIL'),
-    from: env('EMAIL_FROM') || env('GMAIL_USER'),
+    from: env('EMAIL_FROM') || env('SMTP_USER') || env('GMAIL_USER'),
     sendgridKey: env('SENDGRID_API_KEY'),
+    smtpHost: env('SMTP_HOST'),
+    smtpPort: Number(env('SMTP_PORT', '587')),
+    smtpUser: env('SMTP_USER'),
+    smtpPass: env('SMTP_PASS'),
     gmailUser: env('GMAIL_USER'),
     gmailAppPassword: env('GMAIL_APP_PASSWORD').replace(/\s+/g, ''),
   },
@@ -91,7 +95,8 @@ export function missingEnv(needs) {
     wordpress: [['WP_SITE_URL', config.wp.siteUrl], ['WP_USER', config.wp.user], ['WP_APP_PASSWORD', config.wp.appPassword]],
     email: [
       ['NOTIFY_EMAIL', config.email.to],
-      ['SENDGRID_API_KEY or GMAIL_USER + GMAIL_APP_PASSWORD', config.email.sendgridKey || (config.email.gmailUser && config.email.gmailAppPassword)],
+      ['SENDGRID_API_KEY, SMTP_HOST + SMTP_USER + SMTP_PASS, or GMAIL_USER + GMAIL_APP_PASSWORD',
+        config.email.sendgridKey || (config.email.smtpHost && config.email.smtpUser && config.email.smtpPass) || (config.email.gmailUser && config.email.gmailAppPassword)],
       ['EMAIL_FROM (required with SendGrid)', !config.email.sendgridKey || config.email.from],
     ],
   };

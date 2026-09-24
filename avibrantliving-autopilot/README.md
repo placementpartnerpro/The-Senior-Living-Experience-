@@ -33,7 +33,7 @@ Each run does the following:
 | Anthropic API key | `ANTHROPIC_API_KEY` | console.anthropic.com > API Keys |
 | Unsplash access key | `UNSPLASH_ACCESS_KEY` | unsplash.com/developers > New Application. Apply for production access (demo apps get 50 requests an hour, which is enough for testing). |
 | Pexels API key | `PEXELS_API_KEY` | pexels.com/api |
-| Email: SendGrid key **or** Gmail app password | see `.env.example` | Gmail: Google Account > Security > 2-Step Verification > App passwords |
+| Sender address + email login | `EMAIL_FROM` plus one of: `SENDGRID_API_KEY`, `SMTP_*`, or `GMAIL_*` | Sender: info@theseniorlivingexperience.com. Use the mailbox's SMTP settings from its host, or a Google Workspace app password. |
 | Notification address | `NOTIFY_EMAIL` | Pre-filled with vibrantlivingoffice@gmail.com |
 
 ---
@@ -80,8 +80,8 @@ npm run test-email        # sends a sample confirmation to NOTIFY_EMAIL
 
 1. Merge this code into the repository's default branch. Scheduled workflows only run from the default branch.
 2. In **Settings > Secrets and variables > Actions**, add the following.
-   - **Secrets:** `WP_USER`, `WP_APP_PASSWORD`, `ANTHROPIC_API_KEY`, `UNSPLASH_ACCESS_KEY`, `PEXELS_API_KEY`, and either `SENDGRID_API_KEY` or `GMAIL_APP_PASSWORD`
-   - **Variables:** `FACILITY_NAME`, `FACILITY_PHONE`, `WP_SITE_URL`, `NOTIFY_EMAIL`, plus `EMAIL_FROM` (SendGrid) or `GMAIL_USER` (Gmail), and optionally `CTA_URL`, `FAMILY_GUIDE_URL`, `SERVICES_URL`, `CONTACT_URL`
+   - **Secrets:** `WP_USER`, `WP_APP_PASSWORD`, `ANTHROPIC_API_KEY`, `UNSPLASH_ACCESS_KEY`, `PEXELS_API_KEY`, and one of `SENDGRID_API_KEY`, `SMTP_PASS`, or `GMAIL_APP_PASSWORD`
+   - **Variables:** `FACILITY_NAME`, `FACILITY_PHONE`, `WP_SITE_URL`, `NOTIFY_EMAIL`, `EMAIL_FROM`, plus `SMTP_HOST` + `SMTP_USER` (SMTP) or `GMAIL_USER` (Google), and optionally `CTA_URL`, `FAMILY_GUIDE_URL`, `SERVICES_URL`, `CONTACT_URL`
 3. **Actions > Blog autopilot > Run workflow** lets you run any slot by hand, as a draft, a live post, or a preview. This works from a phone too.
 
 GitHub cron uses UTC and ignores daylight saving time, so the workflow fires at both possible UTC hours for each slot. The script publishes only when it is the right hour in Los Angeles. GitHub sometimes starts scheduled jobs late, so a run in the following hour publishes the slot if it was missed. A slot never publishes twice in one day.

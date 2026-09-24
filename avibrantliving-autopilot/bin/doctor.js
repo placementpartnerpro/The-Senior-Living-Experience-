@@ -1,10 +1,9 @@
 #!/usr/bin/env node
 // Checks every credential and endpoint the pipeline depends on, without publishing anything.
 import Anthropic from '@anthropic-ai/sdk';
-import nodemailer from 'nodemailer';
 import { config, missingEnv } from '../src/config.js';
 import { checkAuth } from '../src/wordpress.js';
-import { emailProvider } from '../src/notify.js';
+import { emailProvider, smtpTransport } from '../src/notify.js';
 import { queueStatus } from '../src/topics.js';
 
 let failures = 0;
@@ -65,10 +64,10 @@ if (config.images.pexelsKey) {
     return 'reachable';
   });
 }
-if (emailProvider() === 'gmail') {
-  await check('Gmail SMTP login', async () => {
-    await nodemailer.createTransport({ service: 'gmail', auth: { user: config.email.gmailUser, pass: config.email.gmailAppPassword } }).verify();
-    return config.email.gmailUser;
+if (emailProvider() === 'gmail' || emailProvider() === 'smtp') {
+  await check(`${emailProvider() === 'gmail' ? 'Gmail' : config.email.smtpHost} SMTP login`, async () => {
+    await smtpTransport().verify();
+    return `sending as ${config.email.from}`;
   });
 } else if (emailProvider() === 'sendgrid') {
   await check('SendGrid key', async () => {
