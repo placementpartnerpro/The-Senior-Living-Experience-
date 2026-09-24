@@ -103,6 +103,43 @@ CRON_TZ=America/Los_Angeles
 
 ---
 
+## Podcast episodes and featured partners
+
+The blog follows the podcast. Each episode features one partner community, and every post published while that episode is live features the same partner. Each post gets:
+
+- the partner in the "Featured community" box (services link, tour link, phone) with the partnership disclosure,
+- a "Listen to the podcast" link to the episode (when `url` is set),
+- at most one natural mention of the partner and the episode in the article.
+
+Add each episode to `episodes.json` (copy the format from `episodes.example.json`):
+
+```json
+{
+  "number": 12,
+  "title": "When Mom Needs More Help: Assisted Living vs Memory Care",
+  "date": "2026-10-05",
+  "url": "https://link-to-the-episode",
+  "summary": "One or two sentences on what the episode covers.",
+  "partner": {
+    "name": "A Vibrant Living",
+    "website": "https://www.avibrantliving.com",
+    "city": "San Diego",
+    "phone": "(619) 555-0100",
+    "servicesUrl": "https://www.avibrantliving.com/services",
+    "tourUrl": "https://www.avibrantliving.com/contact",
+    "description": "Facts the partner has approved, used as the only facts about them."
+  }
+}
+```
+
+- `date` is the first day posts should feature this episode. The episode stays live until the next episode's date.
+- Required: `number`, `title`, `date`, `partner.name`, and `partner.website`. `servicesUrl` defaults to website/services/, and `tourUrl` defaults to website/contact/.
+- You can add episodes ahead of time. Each one switches on by itself on its date.
+- If no episode is live, posts feature the partner set in `.env` (`FACILITY_*`).
+- `npm run doctor` shows the live and next episode.
+
+To have posts about the episode's own subject, add topics tagged with `"episode": 12` (see below). They run first while episode 12 is live, and they wait if it isn't live yet.
+
 ## Adding topics manually
 
 Open `topics.json` and add an entry anywhere in the list:
@@ -118,7 +155,8 @@ Open `topics.json` and add an entry anywhere in the list:
 
 - `focus` must be one of: `family-support` (morning), `care-services` (midday), or `planning-resources` (evening).
 - `keyword` is optional. Without it, Claude picks one.
-- `notes` is optional. It is passed to Claude as guidance from the facility.
+- `notes` is optional. It is passed to Claude as guidance from your team.
+- `episode` is optional. It ties the topic to a podcast episode number: the topic runs first while that episode is live and waits until then.
 - Topics you add are used **before** auto-generated ones in the same focus.
 
 Check the queue with `npm run topics:status`. To add 30 generated topics now, run `npm run topics:refill`. Used topics move to `state/topics-used.json` with their live URL.

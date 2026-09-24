@@ -4,6 +4,7 @@ import { config, FOCI, SLOTS, missingEnv } from './config.js';
 import { createLogger, localDate, localHour } from './logger.js';
 import { readJson, writeJson } from './state.js';
 import { ensureQueue, pickTopic, markTopicUsed } from './topics.js';
+import { applyActiveEpisode } from './episodes.js';
 import { generatePost } from './generate.js';
 import { findImages, rememberImages } from './images.js';
 import { renderPost, articleHtml } from './render.js';
@@ -78,11 +79,12 @@ export async function runSlot({ slot: requestedSlot, mode = 'publish', force = f
 
   let topic;
   try {
+    const episode = applyActiveEpisode(date);
     const needs = mode === 'preview' ? ['generate'] : ['generate', 'images', 'wordpress', 'email'];
     const missing = missingEnv(needs);
     if (missing.length) throw new Error(`Missing configuration in .env: ${missing.join(', ')}`);
 
-    logger.info(`Starting ${mode} run for ${slot} slot (${category}).`);
+    logger.info(`Starting ${mode} run for ${slot} slot (${category}). Featured partner: ${config.facility.name}${episode ? ` (podcast episode ${episode.number}: ${episode.title})` : ' (no live episode; using .env partner)'}.`);
     await ensureQueue({ logger });
     topic = pickTopic(focus);
     if (!topic) throw new Error(`No topics available for focus "${focus}".`);
@@ -136,7 +138,7 @@ export async function runSlot({ slot: requestedSlot, mode = 'publish', force = f
     if (mode === 'publish') {
       markTopicUsed(topic, { title: post.title, url, keyword: post.primary_keyword });
       rememberImages(uploaded);
-      recordHistory({ date, slot, outcome: 'published', at: new Date().toISOString(), postId: wpPost.id, title: post.title, url });
+      recordHistory({ date, slot, outcome: 'published', at: new Date().toISOString(), postId: wpPost.id, title: post.title, url, partner: config.facility.name, episode: episode?.number });
     }
 
     await sendEmail(successEmail({
@@ -148,6 +150,8 @@ export async function runSlot({ slot: requestedSlot, mode = 'publish', force = f
       thumbnailUrl: uploaded[0].url,
       category,
       status,
+      partner: config.facility.name,
+      episode,
     }));
     logger.info(`Confirmation email sent to ${config.email.to}.`);
     return { outcome: status === 'publish' ? 'published' : 'draft', url, postId: wpPost.id, preview, post };

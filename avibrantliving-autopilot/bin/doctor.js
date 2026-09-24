@@ -5,6 +5,7 @@ import { config, missingEnv } from '../src/config.js';
 import { checkAuth } from '../src/wordpress.js';
 import { emailProvider, smtpTransport } from '../src/notify.js';
 import { queueStatus } from '../src/topics.js';
+import { loadEpisodes, activeEpisode } from '../src/episodes.js';
 
 let failures = 0;
 const ok = (msg) => console.log(`  OK    ${msg}`);
@@ -79,6 +80,15 @@ if (emailProvider() === 'gmail' || emailProvider() === 'smtp') {
     return 'mail.send allowed';
   });
 }
+
+console.log('\nPodcast episodes');
+await check('episodes.json', async () => {
+  const episodes = loadEpisodes();
+  const live = activeEpisode(episodes);
+  const next = episodes.filter((e) => !live || e.date > live.date).sort((a, b) => a.date.localeCompare(b.date))[0];
+  if (!live && !config.facility.name) throw new Error('no episode is live yet and FACILITY_NAME is not set');
+  return `${episodes.length} episode(s); live: ${live ? `#${live.number} "${live.title}" featuring ${live.partner.name}` : `none (using ${config.facility.name})`}${next ? `; next: #${next.number} on ${next.date}` : ''}`;
+});
 
 console.log('\nTopics');
 await check('topics.json', async () => JSON.stringify(queueStatus()));

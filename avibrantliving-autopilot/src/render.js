@@ -37,8 +37,12 @@ export function ctaBlock() {
     ? ` You can also <a href="${escapeHtml(f.familyGuideUrl)}">download a free family guide</a> to read at your own pace.`
     : '';
   const facilityPhone = f.phone ? ` or call ${telLink(f.phone)}` : '';
+  const e = config.episode;
+  const listen = e?.url
+    ? `<p><strong>Listen to the podcast:</strong> this article pairs with <a href="${escapeHtml(e.url)}">Episode ${escapeHtml(String(e.number))}: ${escapeHtml(e.title)}</a> of the ${escapeHtml(b.name)} podcast, featuring ${escapeHtml(f.name)}.</p>\n`
+    : '';
   return `<div class="avl-cta">
-<p><strong>You do not have to figure this out alone.</strong> Our advisors at ${escapeHtml(b.name)} help families compare options, understand costs, and plan next steps, with no pressure. <a href="${escapeHtml(b.ctaUrl)}">${escapeHtml(b.ctaLabel)}</a> or call us at ${telLink(b.phone)}.${guide}</p>
+${listen}<p><strong>You do not have to figure this out alone.</strong> Our advisors at ${escapeHtml(b.name)} help families compare options, understand costs, and plan next steps, with no pressure. <a href="${escapeHtml(b.ctaUrl)}">${escapeHtml(b.ctaLabel)}</a> or call us at ${telLink(b.phone)}.${guide}</p>
 <p><strong>Featured community: ${escapeHtml(f.name)}.</strong> If you are looking in ${escapeHtml(f.city)}, ${escapeHtml(f.name)} offers assisted living, memory care, respite care, and long-term care. <a href="${escapeHtml(f.servicesUrl)}">Explore their care options</a>, or <a href="${escapeHtml(f.ctaUrl)}">${escapeHtml(f.ctaLabel.toLowerCase())}</a>${facilityPhone}.</p>
 <p class="avl-disclosure"><em>${escapeHtml(f.name)} is a partner community of ${escapeHtml(b.name)}.</em></p>
 </div>`;

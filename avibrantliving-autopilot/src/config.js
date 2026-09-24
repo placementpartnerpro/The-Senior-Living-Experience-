@@ -67,6 +67,7 @@ export const config = {
   },
   paths: {
     topics: path.join(ROOT, 'topics.json'),
+    episodes: path.join(ROOT, 'episodes.json'),
     topicsUsed: path.join(ROOT, 'state', 'topics-used.json'),
     history: path.join(ROOT, 'state', 'history.json'),
     imagesUsed: path.join(ROOT, 'state', 'images-used.json'),
@@ -103,7 +104,7 @@ export const SLOTS = {
 // Returns the list of missing env vars needed for the given capability set.
 export function missingEnv(needs) {
   const checks = {
-    generate: [['ANTHROPIC_API_KEY', process.env.ANTHROPIC_API_KEY], ['ADVISOR_PHONE', config.brand.phone], ['FACILITY_NAME', config.facility.name]],
+    generate: [['ANTHROPIC_API_KEY', process.env.ANTHROPIC_API_KEY], ['ADVISOR_PHONE', config.brand.phone], ['a live episode in episodes.json or FACILITY_NAME', config.facility.name]],
     images: [['UNSPLASH_ACCESS_KEY or PEXELS_API_KEY', config.images.unsplashKey || config.images.pexelsKey]],
     wordpress: [['WP_SITE_URL', config.wp.siteUrl], ['WP_USER', config.wp.user], ['WP_APP_PASSWORD', config.wp.appPassword]],
     email: [

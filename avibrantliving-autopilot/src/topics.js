@@ -22,10 +22,15 @@ export function queueStatus(queue = loadQueue()) {
   return { total: queue.length, byFocus };
 }
 
-// Manually added topics (no "source" field) go first so Julie's ideas are used before generated ones.
-export function pickTopic(focus, queue = loadQueue()) {
-  const candidates = queue.filter((t) => t.focus === focus);
-  return candidates.find((t) => t.source !== 'generated') ?? candidates[0] ?? null;
+// Order: topics tagged to the live podcast episode, then manually added topics
+// (no "source" field), then generated ones. Topics tagged to a different
+// episode wait for that episode.
+export function pickTopic(focus, queue = loadQueue(), episodeNumber = config.episode?.number) {
+  const candidates = queue.filter((t) => t.focus === focus && (t.episode === undefined || t.episode === episodeNumber));
+  return candidates.find((t) => episodeNumber !== undefined && t.episode === episodeNumber)
+    ?? candidates.find((t) => t.source !== 'generated')
+    ?? candidates[0]
+    ?? null;
 }
 
 export function markTopicUsed(topic, post) {

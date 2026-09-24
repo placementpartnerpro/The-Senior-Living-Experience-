@@ -55,7 +55,7 @@ export async function sendEmail(message) {
 const shell = (inner) => `<div style="font-family:Georgia,serif;max-width:640px;margin:0 auto;color:#2d2a26;line-height:1.5">${inner}</div>`;
 const row = (label, value) => `<tr><td style="padding:6px 12px 6px 0;color:#6b645c;vertical-align:top">${label}</td><td style="padding:6px 0">${value}</td></tr>`;
 
-export function successEmail({ title, url, keyword, wordCount, publishedAt, thumbnailUrl, category, status }) {
+export function successEmail({ title, url, keyword, wordCount, publishedAt, thumbnailUrl, category, status, partner, episode }) {
   const draft = status !== 'publish';
   const subject = `${config.brand.name} ${draft ? 'Draft ready' : 'Published'}: ${title}`;
   const time = localTimestamp(publishedAt);
@@ -67,10 +67,12 @@ ${row('Title', `<strong>${escapeHtml(title)}</strong>`)}
 ${row(draft ? 'Preview' : 'Live URL', `<a href="${escapeHtml(url)}">${escapeHtml(url)}</a>`)}
 ${row('Primary keyword', escapeHtml(keyword))}
 ${row('Category', escapeHtml(category))}
+${partner ? row('Featured partner', escapeHtml(partner)) : ''}
+${episode ? row('Podcast episode', escapeHtml(`${episode.number}: ${episode.title}`)) : ''}
 ${row('Word count', String(wordCount))}
 ${row(draft ? 'Created' : 'Published', escapeHtml(time))}
 </table>`);
-  const text = `${draft ? 'Draft ready' : 'Published'}: ${title}\n${url}\nPrimary keyword: ${keyword}\nCategory: ${category}\nWord count: ${wordCount}\n${time}`;
+  const text = `${draft ? 'Draft ready' : 'Published'}: ${title}\n${url}\nPrimary keyword: ${keyword}\nCategory: ${category}\n${partner ? `Featured partner: ${partner}\n` : ''}${episode ? `Podcast episode: ${episode.number}: ${episode.title}\n` : ''}Word count: ${wordCount}\n${time}`;
   return { subject, html, text };
 }
 

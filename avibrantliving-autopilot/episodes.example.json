@@ -1,0 +1,18 @@
+[
+  {
+    "number": 12,
+    "title": "When Mom Needs More Help: Assisted Living vs Memory Care",
+    "date": "2026-10-05",
+    "url": "https://podcasts.apple.com/us/podcast/your-show/id000000000?i=000000000",
+    "summary": "Julie Norris, Administrator of A Vibrant Living, talks about the early signs a parent may need memory care and how families can tell the difference from assisted living.",
+    "partner": {
+      "name": "A Vibrant Living",
+      "website": "https://www.avibrantliving.com",
+      "city": "San Diego",
+      "phone": "(619) 555-0100",
+      "servicesUrl": "https://www.avibrantliving.com/services",
+      "tourUrl": "https://www.avibrantliving.com/contact",
+      "description": "Small, home-like community in San Diego offering assisted living, memory care, and respite stays."
+    }
+  }
+]
