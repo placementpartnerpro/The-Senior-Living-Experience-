@@ -1,6 +1,6 @@
 # avibrantliving-autopilot
 
-Automated blog publishing for **www.avibrantliving.com**. It publishes three SEO-optimized posts a day and emails a confirmation after each one.
+Automated blog publishing to the WordPress blog at **blog.theseniorlivingexperience.com**, promoting **www.avibrantliving.com**. It publishes three SEO-optimized posts a day and emails a confirmation after each one.
 
 | Slot | Time (Pacific) | Focus | WordPress category |
 |---|---|---|---|
@@ -81,7 +81,7 @@ npm run test-email        # sends a sample confirmation to NOTIFY_EMAIL
 1. Merge this code into the repository's default branch. Scheduled workflows only run from the default branch.
 2. In **Settings > Secrets and variables > Actions**, add the following.
    - **Secrets:** `WP_USER`, `WP_APP_PASSWORD`, `ANTHROPIC_API_KEY`, `UNSPLASH_ACCESS_KEY`, `PEXELS_API_KEY`, and one of `SENDGRID_API_KEY`, `SMTP_PASS`, or `GMAIL_APP_PASSWORD`
-   - **Variables:** `FACILITY_NAME`, `FACILITY_PHONE`, `WP_SITE_URL`, `NOTIFY_EMAIL`, `EMAIL_FROM`, plus `SMTP_HOST` + `SMTP_USER` (SMTP) or `GMAIL_USER` (Google), and optionally `CTA_URL`, `FAMILY_GUIDE_URL`, `SERVICES_URL`, `CONTACT_URL`
+   - **Variables:** `FACILITY_NAME`, `FACILITY_PHONE`, `WP_SITE_URL` (the blog), `FACILITY_SITE_URL` (the facility's website), `NOTIFY_EMAIL`, `EMAIL_FROM`, plus `SMTP_HOST` + `SMTP_USER` (SMTP) or `GMAIL_USER` (Google), and optionally `CTA_URL`, `FAMILY_GUIDE_URL`, `SERVICES_URL`, `CONTACT_URL`
 3. **Actions > Blog autopilot > Run workflow** lets you run any slot by hand, as a draft, a live post, or a preview. This works from a phone too.
 
 GitHub cron uses UTC and ignores daylight saving time, so the workflow fires at both possible UTC hours for each slot. The script publishes only when it is the right hour in Los Angeles. GitHub sometimes starts scheduled jobs late, so a run in the following hour publishes the slot if it was missed. A slot never publishes twice in one day.

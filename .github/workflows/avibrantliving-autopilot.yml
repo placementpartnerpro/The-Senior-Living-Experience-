@@ -46,6 +46,7 @@ jobs:
       SERVICES_URL: ${{ vars.SERVICES_URL }}
       CONTACT_URL: ${{ vars.CONTACT_URL }}
       WP_SITE_URL: ${{ vars.WP_SITE_URL }}
+      FACILITY_SITE_URL: ${{ vars.FACILITY_SITE_URL }}
       WP_POST_STATUS: ${{ vars.WP_POST_STATUS || 'publish' }}
       NOTIFY_EMAIL: ${{ vars.NOTIFY_EMAIL }}
       EMAIL_FROM: ${{ vars.EMAIL_FROM }}

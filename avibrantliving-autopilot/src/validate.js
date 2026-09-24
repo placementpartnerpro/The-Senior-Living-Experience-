@@ -20,7 +20,12 @@ export const isSourceDomain = (url) => {
   return !!host && SOURCE_DOMAINS.some((d) => host === d || host.endsWith(`.${d}`));
 };
 
-export const isInternal = (url) => hostOf(url) === hostOf(config.wp.siteUrl);
+// Links to the blog itself or to the facility's website (services, contact, tour, guide).
+export const isInternal = (url) => {
+  const f = config.facility;
+  const hosts = [config.wp.siteUrl, f.siteUrl, f.servicesUrl, f.contactUrl, f.ctaUrl, f.familyGuideUrl].filter(Boolean).map(hostOf);
+  return hosts.includes(hostOf(url));
+};
 
 const includesPhrase = (text, phrase) => text.toLowerCase().includes(phrase.toLowerCase());
 

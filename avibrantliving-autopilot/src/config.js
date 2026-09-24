@@ -8,18 +8,21 @@ dotenv.config({ path: path.join(ROOT, '.env'), quiet: true });
 const env = (key, fallback = '') => (process.env[key] ?? fallback).trim();
 const stripSlash = (url) => url.replace(/\/+$/, '');
 
-const siteUrl = stripSlash(env('WP_SITE_URL', 'https://www.avibrantliving.com'));
+// The blog (WordPress) and the facility's own website can live on different domains.
+const siteUrl = stripSlash(env('WP_SITE_URL', 'https://blog.theseniorlivingexperience.com'));
+const facilityUrl = stripSlash(env('FACILITY_SITE_URL', 'https://www.avibrantliving.com'));
 
 export const config = {
   facility: {
     name: env('FACILITY_NAME'),
     city: env('FACILITY_CITY', 'San Diego'),
     phone: env('FACILITY_PHONE'),
-    ctaUrl: env('CTA_URL') || `${siteUrl}/contact/`,
+    siteUrl: facilityUrl,
+    ctaUrl: env('CTA_URL') || `${facilityUrl}/contact/`,
     ctaLabel: env('CTA_LABEL', 'Schedule a tour'),
     familyGuideUrl: env('FAMILY_GUIDE_URL'),
-    servicesUrl: env('SERVICES_URL') || `${siteUrl}/services/`,
-    contactUrl: env('CONTACT_URL') || `${siteUrl}/contact/`,
+    servicesUrl: env('SERVICES_URL') || `${facilityUrl}/services/`,
+    contactUrl: env('CONTACT_URL') || `${facilityUrl}/contact/`,
   },
   timezone: env('TIMEZONE', 'America/Los_Angeles'),
   anthropic: {
