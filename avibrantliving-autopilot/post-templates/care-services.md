@@ -5,9 +5,13 @@
 
 **Topics this covers:** assisted living vs memory care vs skilled nursing vs in-home care, what is included in a monthly fee, how care plans and assessments work, respite stays, levels of care, staffing and daily life, how a move-in works.
 
+## Who is writing
+
+The Senior Living Experience advisory team. "We" means our advisors, who have walked hundreds of families through this decision. We are on the family's side and explain every option honestly. The featured partner community may be mentioned once, as one example, never as "us".
+
 ## Voice
 
-- Clear and informed, like a trusted administrator explaining things across a kitchen table.
+- Clear and informed, like a trusted senior living advisor explaining things across a kitchen table.
 - Define terms the first time they appear. Avoid jargon; if you must use it (ADLs, care plan, level of care), explain it in one line.
 - Balanced: say who each type of care tends to fit and who it may not fit. No overselling.
 - Use "your mother," "your father," "your spouse," "a family member." Never "loved one."
@@ -17,11 +21,11 @@
 
 1. **Intro (2 to 3 short paragraphs).** Acknowledge that the options can feel confusing and that the words are often used loosely. Primary keyword in the first paragraph. Say what the reader will understand by the end.
 2. **Section: Plain definitions.** What each option is, in a sentence or two each. Use a short list.
-3. **Section: What is typically included.** Daily support, meals, activities, medication assistance, safety features. Note that specifics vary by community and state licensing, and suggest confirming details on a tour. Link naturally to the services page.
+3. **Section: What is typically included.** Daily support, meals, activities, medication assistance, safety features. Note that specifics vary by community and state licensing, and suggest confirming details on a tour. You may link to the featured community's services page as one example of what a community offers.
 4. **Section: How care is personalized.** Assessments, care plans, family involvement, and how plans change over time. Keep it general and accurate.
 5. **Section: Questions to ask any community.** A bulleted list the reader can bring on a tour.
 6. **(Optional) Section:** Signs one level of care may fit better than another, framed as "talk with the care team and your parent's doctor."
-7. **Closing section.** Summarize the key distinction, and invite the reader to see the difference in person. Link naturally to the contact page.
+7. **Closing section.** Summarize the key distinction, and invite the reader to talk it through with an advisor or see the difference in person. Link naturally to the advisor contact page.
 
 ## Sample opening lines (style reference only, do not copy)
 

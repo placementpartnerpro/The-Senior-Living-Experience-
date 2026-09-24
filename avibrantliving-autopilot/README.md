@@ -1,6 +1,6 @@
 # avibrantliving-autopilot
 
-Automated blog publishing to the WordPress blog at **blog.theseniorlivingexperience.com**, promoting **www.avibrantliving.com**. It publishes three SEO-optimized posts a day and emails a confirmation after each one.
+Automated blog publishing for **The Senior Living Experience**, a senior living advisory service. Posts go to the WordPress blog at **blog.theseniorlivingexperience.com**, are written in the advisors' voice, and feature the partner community **A Vibrant Living** (www.avibrantliving.com). It publishes three SEO-optimized posts a day and emails a confirmation after each one.
 
 | Slot | Time (Pacific) | Focus | WordPress category |
 |---|---|---|---|
@@ -24,8 +24,8 @@ Each run does the following:
 
 | Item | Where it goes | How to get it |
 |---|---|---|
-| Facility name (exactly as it should appear) | `FACILITY_NAME` | |
-| Phone number for the call to action | `FACILITY_PHONE` | |
+| Advisor phone number and "talk with an advisor" page | `ADVISOR_PHONE`, `ADVISOR_CTA_URL` | |
+| Partner community name, and phone (optional) | `FACILITY_NAME`, `FACILITY_PHONE` | |
 | Tour or booking page URL (optional, defaults to /contact/) | `CTA_URL` | |
 | Family guide download URL (optional) | `FAMILY_GUIDE_URL` | |
 | Confirm the /services/ and /contact/ page URLs | `SERVICES_URL`, `CONTACT_URL` | `npm run doctor` checks both |
@@ -81,7 +81,7 @@ npm run test-email        # sends a sample confirmation to NOTIFY_EMAIL
 1. Merge this code into the repository's default branch. Scheduled workflows only run from the default branch.
 2. In **Settings > Secrets and variables > Actions**, add the following.
    - **Secrets:** `WP_USER`, `WP_APP_PASSWORD`, `ANTHROPIC_API_KEY`, `UNSPLASH_ACCESS_KEY`, `PEXELS_API_KEY`, and one of `SENDGRID_API_KEY`, `SMTP_PASS`, or `GMAIL_APP_PASSWORD`
-   - **Variables:** `FACILITY_NAME`, `FACILITY_PHONE`, `WP_SITE_URL` (the blog), `FACILITY_SITE_URL` (the facility's website), `NOTIFY_EMAIL`, `EMAIL_FROM`, plus `SMTP_HOST` + `SMTP_USER` (SMTP) or `GMAIL_USER` (Google), and optionally `CTA_URL`, `FAMILY_GUIDE_URL`, `SERVICES_URL`, `CONTACT_URL`
+   - **Variables:** `ADVISOR_PHONE`, `ADVISOR_CTA_URL`, `FACILITY_NAME`, `WP_SITE_URL` (the blog), `FACILITY_SITE_URL` (the facility's website), `NOTIFY_EMAIL`, `EMAIL_FROM`, plus `SMTP_HOST` + `SMTP_USER` (SMTP) or `GMAIL_USER` (Google), and optionally `CTA_URL`, `FAMILY_GUIDE_URL`, `SERVICES_URL`, `CONTACT_URL`
 3. **Actions > Blog autopilot > Run workflow** lets you run any slot by hand, as a draft, a live post, or a preview. This works from a phone too.
 
 GitHub cron uses UTC and ignores daylight saving time, so the workflow fires at both possible UTC hours for each slot. The script publishes only when it is the right hour in Los Angeles. GitHub sometimes starts scheduled jobs late, so a run in the following hour publishes the slot if it was missed. A slot never publishes twice in one day.
@@ -136,6 +136,7 @@ The validator in `src/validate.js` and `src/guardrails.js` rejects a draft unles
 - The post links to the /services/ and /contact/ pages.
 - None of these appear: "in a world where", "ain't", "in conclusion", "delve", "tapestry", "landscape", "realm", "utilize", "leverage", "loved one", em dashes, emojis, fear hooks ("die alone", "before it's too late"), "guarantee", or "cure".
 - Every percentage, dollar figure, or "1 in X" statistic links to an approved source in the same paragraph. Approved sources include AARP, CDC, the Alzheimer's Association, NIA/NIH, Medicare, Medicaid/CMS, ACL/Eldercare Locator, the VA, SSA, NCOA, Family Caregiver Alliance, California DHCS, CDSS, CDA, and Genworth. Links to any other external site are rejected, and source links that return 404 are rejected.
+- The partner community is mentioned at most twice in the article body, and every post discloses the partnership.
 - Every post ends with the call to action (tour link, phone number, services link, and the family guide when `FAMILY_GUIDE_URL` is set), followed by the informational disclaimer.
 
 **About the H1:** WordPress themes already print the post title as the page's H1. The body therefore does not repeat it by default, since two H1s hurt SEO. Set `INCLUDE_H1_IN_BODY=true` if the theme does not show titles.

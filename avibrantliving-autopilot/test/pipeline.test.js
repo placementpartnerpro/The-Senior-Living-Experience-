@@ -14,6 +14,7 @@ Object.assign(process.env, {
   WP_APP_PASSWORD: 'abcd efgh ijkl mnop',
   FACILITY_NAME: 'Test Facility',
   FACILITY_PHONE: '(619) 555-0100',
+  ADVISOR_PHONE: '(858) 555-0199',
   UNSPLASH_ACCESS_KEY: 'unsplash-key',
   NOTIFY_EMAIL: 'office@example.com',
   EMAIL_FROM: 'autopilot@example.com',
@@ -48,7 +49,7 @@ const draft = (keyword) => ({
     { heading: 'Caring for yourself', body_html: `<ul><li>${filler(8)}</li><li>${filler(8)}</li></ul>` },
     { heading: 'What families often find', body_html: `<p>${filler(17)}</p>` },
   ],
-  closing: { heading: 'A calm next step', body_html: `<p>${filler(8)} Please <a href="https://www.avibrantliving.com/contact/">reach out</a> anytime.</p>` },
+  closing: { heading: 'A calm next step', body_html: `<p>${filler(8)} Please <a href="https://www.theseniorlivingexperience.com/contact/">talk with an advisor</a> anytime.</p>` },
   image_queries: ['daughter with elderly mother', 'holding hands', 'sunlit garden'],
 });
 
@@ -94,7 +95,7 @@ globalThis.fetch = async (input, init = {}) => {
       return json({ id: 555, status: p.status, link: `https://www.avibrantliving.com/${p.slug}/` }, 201);
     }
   }
-  if (u.hostname === 'www.avibrantliving.com') return new Response('ok', { status: 200 });
+  if (['www.avibrantliving.com', 'www.theseniorlivingexperience.com'].includes(u.hostname)) return new Response('ok', { status: 200 });
   if (u.hostname === 'api.sendgrid.com') return new Response('', { status: 202 });
   throw new Error(`Unmocked fetch: ${method} ${url}`);
 };
@@ -128,7 +129,7 @@ test('publish run creates a complete post, emails Julie, and consumes the topic'
   assert.equal(post.meta._yoast_wpseo_focuskw, 'signs it is time for assisted living');
 
   const mail = JSON.parse(calls.find((c) => c.url.includes('sendgrid')).body);
-  assert.equal(mail.subject, 'Test Facility Published: Signs it is time for assisted living: A Gentle Guide');
+  assert.equal(mail.subject, 'The Senior Living Experience Published: Signs it is time for assisted living: A Gentle Guide');
   const mailHtml = mail.content.find((c) => c.type === 'text/html').value;
   for (const bit of ['signs-it-is-time-for-assisted-living/', 'Word count', '<img src="https://www.avibrantliving.com/wp-content/uploads/']) {
     assert.ok(mailHtml.includes(bit), `email includes ${bit}`);

@@ -5,6 +5,10 @@
 
 **Topics this covers:** touring a community, paying for care, long-term care insurance, Medicare and Medi-Cal/Medicaid basics, VA benefits, powers of attorney and advance directives, preparing for a move, hospital discharge planning.
 
+## Who is writing
+
+The Senior Living Experience advisory team. "We" means our advisors, who have walked hundreds of families through this decision. We are on the family's side and explain every option honestly. The featured partner community may be mentioned once, as one example, never as "us".
+
 ## Voice
 
 - Steady and practical. "Here is what to gather, who to call, and what to ask."
@@ -18,9 +22,9 @@
 2. **Section: The basics in plain language.** What the program, document, or process is and is not. Link to an approved official source (for example medicare.gov, medicaid.gov, dhcs.ca.gov, va.gov, nia.nih.gov) where it genuinely helps.
 3. **Section: A step-by-step checklist.** Numbered or bulleted steps, documents to gather, or questions to ask.
 4. **Section: Common misunderstandings.** Gently correct frequent myths (for example, that Medicare pays for long-term assisted living). Keep claims general and accurate; when unsure, say "check with" the right source.
-5. **Section: Who can help.** Professionals and free resources (Area Agency on Aging via eldercare.acl.gov, HICAP counseling in California, elder law attorneys). Link naturally to the services page where relevant.
+5. **Section: Who can help.** Professionals and free resources (Area Agency on Aging via eldercare.acl.gov, HICAP counseling in California, elder law attorneys, and senior living advisors like ours). Mention that advisors can help compare communities and costs.
 6. **(Optional) Section:** What to expect at a tour or during move-in planning.
-7. **Closing section.** Summarize the first one or two steps, and invite the reader to tour or call with questions. Link naturally to the contact page.
+7. **Closing section.** Summarize the first one or two steps, and invite the reader to talk with an advisor or schedule tours. Link naturally to the advisor contact page.
 
 ## Sample opening lines (style reference only, do not copy)
 

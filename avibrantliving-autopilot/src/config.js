@@ -11,8 +11,18 @@ const stripSlash = (url) => url.replace(/\/+$/, '');
 // The blog (WordPress) and the facility's own website can live on different domains.
 const siteUrl = stripSlash(env('WP_SITE_URL', 'https://blog.theseniorlivingexperience.com'));
 const facilityUrl = stripSlash(env('FACILITY_SITE_URL', 'https://www.avibrantliving.com'));
+const brandUrl = stripSlash(env('BRAND_SITE_URL', 'https://www.theseniorlivingexperience.com'));
 
 export const config = {
+  // The advisory brand that writes the blog and owns the relationship with readers.
+  brand: {
+    name: env('BRAND_NAME', 'The Senior Living Experience'),
+    siteUrl: brandUrl,
+    phone: env('ADVISOR_PHONE'),
+    ctaUrl: env('ADVISOR_CTA_URL') || `${brandUrl}/contact/`,
+    ctaLabel: env('ADVISOR_CTA_LABEL', 'Talk with a senior living advisor'),
+  },
+  // The partner community featured in every post.
   facility: {
     name: env('FACILITY_NAME'),
     city: env('FACILITY_CITY', 'San Diego'),
@@ -93,7 +103,7 @@ export const SLOTS = {
 // Returns the list of missing env vars needed for the given capability set.
 export function missingEnv(needs) {
   const checks = {
-    generate: [['ANTHROPIC_API_KEY', process.env.ANTHROPIC_API_KEY], ['FACILITY_NAME', config.facility.name], ['FACILITY_PHONE', config.facility.phone]],
+    generate: [['ANTHROPIC_API_KEY', process.env.ANTHROPIC_API_KEY], ['ADVISOR_PHONE', config.brand.phone], ['FACILITY_NAME', config.facility.name]],
     images: [['UNSPLASH_ACCESS_KEY or PEXELS_API_KEY', config.images.unsplashKey || config.images.pexelsKey]],
     wordpress: [['WP_SITE_URL', config.wp.siteUrl], ['WP_USER', config.wp.user], ['WP_APP_PASSWORD', config.wp.appPassword]],
     email: [

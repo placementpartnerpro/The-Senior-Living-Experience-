@@ -26,14 +26,21 @@ function figure(image) {
   return `<figure class="wp-block-image size-large"><img src="${escapeHtml(image.url)}" alt="${escapeHtml(image.alt)}" width="1200" height="675"${idClass} loading="lazy" />${credit}</figure>`;
 }
 
+const telLink = (phone) => `<a href="tel:${escapeHtml(phone.replace(/[^\d+]/g, ''))}">${escapeHtml(phone)}</a>`;
+
+// Advisor call to action, then the featured partner community with a disclosure
+// of the relationship.
 export function ctaBlock() {
+  const b = config.brand;
   const f = config.facility;
-  const phoneHref = f.phone.replace(/[^\d+]/g, '');
   const guide = f.familyGuideUrl
-    ? ` You can also <a href="${escapeHtml(f.familyGuideUrl)}">download our free family guide</a> to read at your own pace.`
+    ? ` You can also <a href="${escapeHtml(f.familyGuideUrl)}">download a free family guide</a> to read at your own pace.`
     : '';
+  const facilityPhone = f.phone ? ` or call ${telLink(f.phone)}` : '';
   return `<div class="avl-cta">
-<p><strong>We are here when you are ready.</strong> If you would like to see ${escapeHtml(f.name)} in person, meet our team, and ask your questions without any pressure, <a href="${escapeHtml(f.ctaUrl)}">${escapeHtml(f.ctaLabel.toLowerCase())}</a> or call us at <a href="tel:${escapeHtml(phoneHref)}">${escapeHtml(f.phone)}</a>.${guide} To learn more about assisted living, memory care, respite care, and long-term care with us, <a href="${escapeHtml(f.servicesUrl)}">explore our services</a>.</p>
+<p><strong>You do not have to figure this out alone.</strong> Our advisors at ${escapeHtml(b.name)} help families compare options, understand costs, and plan next steps, with no pressure. <a href="${escapeHtml(b.ctaUrl)}">${escapeHtml(b.ctaLabel)}</a> or call us at ${telLink(b.phone)}.${guide}</p>
+<p><strong>Featured community: ${escapeHtml(f.name)}.</strong> If you are looking in ${escapeHtml(f.city)}, ${escapeHtml(f.name)} offers assisted living, memory care, respite care, and long-term care. <a href="${escapeHtml(f.servicesUrl)}">Explore their care options</a>, or <a href="${escapeHtml(f.ctaUrl)}">${escapeHtml(f.ctaLabel.toLowerCase())}</a>${facilityPhone}.</p>
+<p class="avl-disclosure"><em>${escapeHtml(f.name)} is a partner community of ${escapeHtml(b.name)}.</em></p>
 </div>`;
 }
 

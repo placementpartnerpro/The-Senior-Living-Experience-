@@ -47,6 +47,7 @@ if (config.wp.user && config.wp.appPassword) {
     return `${me.name} (${me.roles?.join(', ')})`;
   });
 }
+await check(`Advisor contact page ${config.brand.ctaUrl}`, () => urlStatus(config.brand.ctaUrl));
 await check(`Services page ${config.facility.servicesUrl}`, () => urlStatus(config.facility.servicesUrl));
 await check(`Contact page ${config.facility.contactUrl}`, () => urlStatus(config.facility.contactUrl));
 if (config.facility.ctaUrl !== config.facility.contactUrl) await check(`CTA link ${config.facility.ctaUrl}`, () => urlStatus(config.facility.ctaUrl));

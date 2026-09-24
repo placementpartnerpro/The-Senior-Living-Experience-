@@ -39,6 +39,10 @@ jobs:
       run:
         working-directory: avibrantliving-autopilot
     env:
+      BRAND_NAME: ${{ vars.BRAND_NAME || 'The Senior Living Experience' }}
+      BRAND_SITE_URL: ${{ vars.BRAND_SITE_URL }}
+      ADVISOR_PHONE: ${{ vars.ADVISOR_PHONE }}
+      ADVISOR_CTA_URL: ${{ vars.ADVISOR_CTA_URL }}
       FACILITY_NAME: ${{ vars.FACILITY_NAME }}
       FACILITY_PHONE: ${{ vars.FACILITY_PHONE }}
       CTA_URL: ${{ vars.CTA_URL }}

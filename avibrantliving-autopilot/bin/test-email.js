@@ -13,7 +13,7 @@ const message = successEmail({
   category: 'Family Support',
   status: 'publish',
 });
-message.subject = `${config.facility.name} Autopilot test email`;
+message.subject = `${config.brand.name} Autopilot test email`;
 
 try {
   await sendEmail(message);

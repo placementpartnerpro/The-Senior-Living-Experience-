@@ -51,7 +51,7 @@ export async function refillTopics({ count = config.topics.refillCount, logger }
   const existing = [...queue.map((t) => t.topic), ...used.map((t) => t.topic)];
   const perFocus = Math.ceil(count / 3);
 
-  const system = `You plan blog topics for ${config.facility.name || 'a senior care community'}, a managed care facility in ${config.facility.city} offering assisted living, memory care, respite care, long-term care, and family support.
+  const system = `You plan blog topics for ${config.brand.name}, a senior living advisory service helping families in ${config.facility.city} choose between in-home care, assisted living, memory care, respite care, and long-term care.
 Readers are adult children researching care for aging parents, spouses of people living with dementia or chronic illness, discharge planners, social workers, and referring physicians.`;
 
   const prompt = `Generate exactly ${perFocus} new topics for EACH of these three focus areas (${perFocus * 3} total):

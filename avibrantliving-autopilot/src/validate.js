@@ -23,7 +23,8 @@ export const isSourceDomain = (url) => {
 // Links to the blog itself or to the facility's website (services, contact, tour, guide).
 export const isInternal = (url) => {
   const f = config.facility;
-  const hosts = [config.wp.siteUrl, f.siteUrl, f.servicesUrl, f.contactUrl, f.ctaUrl, f.familyGuideUrl].filter(Boolean).map(hostOf);
+  const b = config.brand;
+  const hosts = [config.wp.siteUrl, b.siteUrl, b.ctaUrl, f.siteUrl, f.servicesUrl, f.contactUrl, f.ctaUrl, f.familyGuideUrl].filter(Boolean).map(hostOf);
   return hosts.includes(hostOf(url));
 };
 
@@ -71,8 +72,12 @@ export function validatePost(post) {
     if (!isInternal(url) && !isSourceDomain(url)) errors.push(`Link to ${url} is not an allowed source. Remove it or use one of the approved sources.`);
   }
   const hasLink = (target) => links.some((url) => url.replace(/\/+$/, '') === target.replace(/\/+$/, ''));
-  if (!hasLink(config.facility.servicesUrl)) errors.push(`Body must link naturally to the services page (${config.facility.servicesUrl}).`);
-  if (!hasLink(config.facility.contactUrl)) errors.push(`Body must link naturally to the contact page (${config.facility.contactUrl}).`);
+  if (!hasLink(config.brand.ctaUrl)) errors.push(`Body must link naturally to the advisor contact page (${config.brand.ctaUrl}).`);
+  if (!hasLink(config.facility.servicesUrl)) errors.push(`Body must link naturally to the featured community's services page (${config.facility.servicesUrl}).`);
+  const facilityMentions = (stripTags(article).match(new RegExp(config.facility.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi')) || []).length;
+  if (config.facility.name && facilityMentions > 2) {
+    errors.push(`${config.facility.name} is mentioned ${facilityMentions} times in the article; mention it at most twice so the post stays advisory, not promotional.`);
+  }
 
   // Statistics must be sourced in the same paragraph or list item.
   for (const block of textBlocks(article)) {

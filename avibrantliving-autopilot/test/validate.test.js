@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 process.env.WP_SITE_URL = 'https://www.avibrantliving.com';
 process.env.FACILITY_NAME = 'Test Facility';
 process.env.FACILITY_PHONE = '(619) 555-0100';
+process.env.ADVISOR_PHONE = '(858) 555-0199';
 
 const { validatePost } = await import('../src/validate.js');
 const { normalizeDraft, renderPost } = await import('../src/render.js');
@@ -26,7 +27,7 @@ function goodDraft(overrides = {}) {
       { heading: 'Caring for yourself', body_html: `<ul><li>${filler(9)}</li><li>${filler(9)}</li></ul>` },
       { heading: 'What families often find', body_html: `<p>${filler(18)}</p>` },
     ],
-    closing: { heading: 'A gentle next step', body_html: `<p>${filler(10)} You can always <a href="https://www.avibrantliving.com/contact/">reach out to our team</a>.</p>` },
+    closing: { heading: 'A gentle next step', body_html: `<p>${filler(10)} You can always <a href="https://www.theseniorlivingexperience.com/contact/">talk with one of our advisors</a>.</p>` },
     image_queries: ['daughter and mother', 'holding hands', 'sunlit room'],
     ...overrides,
   };
@@ -84,7 +85,7 @@ test('missing internal links are flagged', () => {
   }));
   const errors = validatePost(post).errors.join('\n');
   assert.match(errors, /services page/);
-  assert.match(errors, /contact page/);
+  assert.match(errors, /advisor contact page/);
 });
 
 test('renderer places images after the 2nd and 4th H2 and ends with CTA and disclaimer', () => {
@@ -95,13 +96,20 @@ test('renderer places images after the 2nd and 4th H2 and ends with CTA and disc
   assert.deepEqual(order, ['<h1>', '<h2>', '<h2>', '<figure', '<h2>', '<h2>', '<figure', '<h2>']);
   assert.ok(html.indexOf('avl-cta') < html.indexOf(DISCLAIMER));
   assert.ok(html.trim().endsWith('</em></p>'));
-  assert.match(html, /tel:6195550100/);
+  assert.match(html, /tel:8585550199/);
+  assert.match(html, /Featured community: Test Facility/);
+  assert.match(html, /Test Facility is a partner community of The Senior Living Experience/);
   assert.match(html, /alt="signs it is time for assisted living: photo 2"/);
 });
 
 test('sanitizer strips unsafe markup and demotes headings', () => {
   const out = sanitizeFragment('<h2 class="x">Hi</h2><script>alert(1)</script><p style="c" onclick="y">Text <a href="javascript:bad()">link</a> <a href="https://alz.org" target="_blank">ok</a></p><div>d</div>');
   assert.equal(out, '<h3>Hi</h3><p>Text link <a href="https://alz.org">ok</a></p>d');
+});
+
+test('the partner community cannot dominate the article', () => {
+  const heavy = normalizeDraft(goodDraft({ intro_html: '<p>Noticing the signs it is time for assisted living can feel heavy. Test Facility helps. Test Facility cares. Test Facility is great.</p>' }));
+  assert.match(validatePost(heavy).errors.join('\n'), /mentioned 3 times/);
 });
 
 test('slugify and word count', () => {

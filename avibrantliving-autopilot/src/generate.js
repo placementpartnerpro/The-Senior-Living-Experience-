@@ -30,8 +30,11 @@ export function loadTemplate(focus) {
 }
 
 function systemPrompt(focus) {
+  const b = config.brand;
   const f = config.facility;
-  return `You write blog posts for ${f.name}, a managed care facility in ${f.city} offering assisted living, memory care, respite care, long-term care, and family resources and support.
+  return `You write blog posts for ${b.name}, a senior living advisory service that helps families in ${f.city} understand their options and find the right care for a parent or spouse. Write as the ${b.name} team ("we" means our advisors, never a care facility). We are on the family's side: we explain options honestly, including in-home care and other communities, and we never pressure anyone toward a particular choice.
+
+${b.name} partners with ${f.name}, a community in ${f.city} offering assisted living, memory care, respite care, and long-term care. You may mention ${f.name} once in the body where it is genuinely relevant (for example as one example of a community offering the care being discussed), always as a partner community, never as "us" or "our community", and never as the only good option. Do not make claims about ${f.name}'s staffing, prices, ratings, or outcomes.
 
 Readers: adult children researching care for an aging parent, spouses of someone living with dementia or a chronic illness, hospital discharge planners, social workers, and referring physicians. Many are tired, grieving, worried about money, and short on time.
 
@@ -46,10 +49,11 @@ ${loadTemplate(focus)}
 }
 
 function userPrompt(topic) {
+  const b = config.brand;
   const f = config.facility;
   return `Write one blog post on this topic: "${topic.topic}"
 ${topic.keyword ? `Primary keyword (use exactly this phrase): "${topic.keyword}"` : 'Choose one realistic long-tail primary keyword (3 to 7 words, lowercase) for this topic.'}
-${topic.notes ? `Notes from the facility: ${topic.notes}\n` : ''}
+${topic.notes ? `Notes from our team: ${topic.notes}\n` : ''}
 Return JSON with these fields:
 - title: the post title (it is also the H1). Contains the primary keyword exactly. Aim for 50 to 65 characters.
 - primary_keyword: the exact keyword phrase, lowercase.
@@ -57,14 +61,14 @@ Return JSON with these fields:
 - tags: 4 to 6 short tags, plain words, no # symbols.
 - intro_html: an empathetic opening hook of 2 or 3 <p> paragraphs. The FIRST paragraph must contain the primary keyword exactly.
 - sections: 4 or 5 body sections, each with a "heading" (plain text, no HTML) and "body_html". At least one heading contains the primary keyword exactly. Use <p>, <ul>/<ol> with <li>, <strong>, <em>, <h3>, and <a href="..."> only. Use bulleted lists where they genuinely help a tired reader scan.
-- closing: one final section with a heading and body_html that gently summarizes and points toward a next step (a tour, a phone call, or a conversation with family). Do not start it with "In conclusion". Do not add phone numbers; the facility contact box is appended automatically after it.
+- closing: one final section with a heading and body_html that gently summarizes and points toward a next step (a free conversation with one of our advisors, a tour, or a talk with family). Do not start it with "In conclusion". Do not add phone numbers; a contact box is appended automatically after it.
 - image_queries: exactly 3 short stock-photo search phrases (2 to 5 words) for warm, natural, dignified imagery related to this post: older adults with family, hands held, sunlit rooms, gardens, caregivers in real everyday moments. Avoid hospitals and medical equipment.
 
 Across intro_html, sections, and closing the post must total ${WORD_MIN + 100} to ${WORD_MAX - 100} words.
 
 Somewhere in the body, link naturally (in running text, not as a list of links) to:
-- the services page: <a href="${f.servicesUrl}">...</a>
-- the contact page: <a href="${f.contactUrl}">...</a>`;
+- our advisor contact page: <a href="${b.ctaUrl}">...</a> (for example "talk with one of our advisors")
+- ${f.name}'s care services page: <a href="${f.servicesUrl}">...</a> (for example where assisted living or memory care is described)`;
 }
 
 // Generates a post, validating and asking for revisions until it passes or attempts run out.

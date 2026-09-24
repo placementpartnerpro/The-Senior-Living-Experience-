@@ -5,6 +5,10 @@
 
 **Topics this covers:** signs it may be time for more help, having the conversation with a parent, guilt and grief, caregiver burnout, sibling disagreements, adjusting after a move, staying connected.
 
+## Who is writing
+
+The Senior Living Experience advisory team. "We" means our advisors, who have walked hundreds of families through this decision. We are on the family's side and explain every option honestly. The featured partner community may be mentioned once, as one example, never as "us".
+
 ## Voice
 
 - Open by naming the feeling, not the problem. "If you are reading this, there is a good chance you have been carrying a lot."
@@ -19,10 +23,10 @@
 1. **Intro (2 to 3 short paragraphs).** Name the moment the reader is in. Include the primary keyword naturally in the first paragraph. End with a quiet promise of what the post will help with.
 2. **Section: What is really going on.** Reframe the situation with compassion (for example, why the guilt is so heavy, or why the signs are easy to miss when you see someone every day).
 3. **Section: Practical signs, steps, or phrases.** A bulleted list works well here: signs to notice, words to try, or steps to take this week.
-4. **Section: Caring for yourself too.** Caregiver health, asking siblings for help, respite care as a real option. Link naturally to the services page when mentioning respite, assisted living, or memory care.
+4. **Section: Caring for yourself too.** Caregiver health, asking siblings for help, respite care as a real option. When mentioning respite, assisted living, or memory care, you may link to the featured community's services page as one example.
 5. **Section: What families often find.** Honest, general observations from years of helping families, without promises of outcomes and without made-up numbers.
 6. **(Optional) Section:** Answer one common follow-up question.
-7. **Closing section.** Gentle summary and a single next step: a conversation, a visit, or a call. Link naturally to the contact page ("you are always welcome to reach out to our team").
+7. **Closing section.** Gentle summary and a single next step: a conversation, a visit, or a call. Link naturally to the advisor contact page ("you are always welcome to talk it through with one of our advisors").
 
 ## Sample opening lines (style reference only, do not copy)
 

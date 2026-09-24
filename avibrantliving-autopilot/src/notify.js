@@ -9,7 +9,7 @@ async function sendViaSendgrid({ subject, html, text }) {
     headers: { Authorization: `Bearer ${config.email.sendgridKey}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
       personalizations: [{ to: config.email.to.split(',').map((email) => ({ email: email.trim() })) }],
-      from: { email: config.email.from, name: `${config.facility.name} Autopilot` },
+      from: { email: config.email.from, name: `${config.brand.name} Autopilot` },
       subject,
       content: [{ type: 'text/plain', value: text }, { type: 'text/html', value: html }],
     }),
@@ -30,7 +30,7 @@ export function smtpTransport(provider = emailProvider()) {
 // send as (the account itself or a verified alias).
 async function sendViaSmtp({ subject, html, text }) {
   await smtpTransport().sendMail({
-    from: `"${config.facility.name} Autopilot" <${config.email.from}>`,
+    from: `"${config.brand.name} Autopilot" <${config.email.from}>`,
     to: config.email.to,
     subject,
     text,
@@ -57,7 +57,7 @@ const row = (label, value) => `<tr><td style="padding:6px 12px 6px 0;color:#6b64
 
 export function successEmail({ title, url, keyword, wordCount, publishedAt, thumbnailUrl, category, status }) {
   const draft = status !== 'publish';
-  const subject = `${config.facility.name} ${draft ? 'Draft ready' : 'Published'}: ${title}`;
+  const subject = `${config.brand.name} ${draft ? 'Draft ready' : 'Published'}: ${title}`;
   const time = localTimestamp(publishedAt);
   const html = shell(`
 <h2 style="font-weight:normal;margin:0 0 16px">${draft ? 'A new draft is ready for review' : 'A new post is live'}</h2>
@@ -75,7 +75,7 @@ ${row(draft ? 'Created' : 'Published', escapeHtml(time))}
 }
 
 export function failureEmail({ slot, topic, error, logLines = [] }) {
-  const subject = `${config.facility.name} Publishing FAILED: ${slot} post`;
+  const subject = `${config.brand.name} Publishing FAILED: ${slot} post`;
   const trace = error?.stack || String(error);
   const html = shell(`
 <h2 style="font-weight:normal;margin:0 0 12px;color:#9b2c2c">The ${escapeHtml(slot)} post did not publish</h2>
